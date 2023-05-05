@@ -26,11 +26,13 @@ public class InventItem : MonoBehaviour
     void Start()
     {
         //今、何かしら装備しているか確かめる
-        EquipTriger = EquipManager.EquipJudge();
+        //EquipTriger = EquipManager.EquipJudge();
+        EquipTriger = NewEquipManager.instance.EquipJudge;
         //装備している状態ならば
         if(EquipTriger == true){
             //今、何番目のアイテムを装備しているかを確かめる
-            EquipNum = EquipManager.EquipNum();
+            // EquipNum = EquipManager.EquipNum();
+            EquipNum = NewEquipManager.instance.equipNum;
         }
         //今注目しているアイテム番号を初期化
         num = 0;
@@ -46,7 +48,8 @@ public class InventItem : MonoBehaviour
             Items.SetActive(true);
         }
          //アイテム名を格納した配列を取得(これで現在入手しているアイテムを取得)
-        item_name = ItemManager.SendItemData();
+        //item_name = ItemManager.SendItemData();
+        item_name =  ItemManager.instance.GetItem;
         
         //入手しているアイテム名でループさせる
         foreach(string iname in item_name){
@@ -117,9 +120,9 @@ public class InventItem : MonoBehaviour
         // }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //装備画面のアイテムは回転させる
         foreach(GameObject inventItem in InventItems){
             inventItem.transform.Rotate(new Vector3(0, 1, 0));
         }
