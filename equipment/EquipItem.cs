@@ -23,7 +23,8 @@ public class EquipItem : MonoBehaviour
             Items.SetActive(true);
         }
         //現在装備中のアイテム名を受け取る
-        ename = EquipManager.EquipItemName();
+        //ename = EquipManager.EquipItemName();
+        ename = NewEquipManager.instance.equipName;
 
         foreach(GameObject equipitem in EquipItems){
             //オブジェクト名と装備中のアイテム名が一致しなかったら非表示にする
@@ -35,16 +36,11 @@ public class EquipItem : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     //装備を変更したときに発動させる関数
     public static void ChangeEquipItem(){
         //現在装備中のアイテム名を受け取る
-        ename = EquipManager.EquipItemName();
+        //ename = EquipManager.EquipItemName();
+        ename = NewEquipManager.instance.equipName;
         foreach(GameObject equipitem in EquipItems){
             //Debug.Log(equipitem.name);
             //オブジェクト名と装備中のアイテム名が一致しなかったら非表示にする
