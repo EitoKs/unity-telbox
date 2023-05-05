@@ -44,7 +44,8 @@ public class EventManagerS : MonoBehaviour
     //ステージがロードされたときに実行されるオープニングイベント
     void Start(){
         NowDirector = director[0];
-        //NowDirector.Play();
+        //NowDirector = director[11];     //踊り確認用
+        NowDirector.Play();
     }
 
     public void GetEventJudge(string event_name){
@@ -57,7 +58,10 @@ public class EventManagerS : MonoBehaviour
                 case "車":
                     //走るイベントのときにクリックしたときエンディングイベントを実行する
                     if(EventRun.instance.NowRunEvent() == true){
-
+                        //敵が追いかけるイベントでないことにする
+                        EventRun.instance.RunEventOff();
+                        NowDirector = director[11];
+                        eventFlags[11] = true;
                     }
                     else if(eventFlags[1] == true){
                         //イベント用の関数を入れる（引数に動かしたいタイムラインを入れる）
@@ -83,6 +87,16 @@ public class EventManagerS : MonoBehaviour
                         }
                     }
                     break;
+                case "バイクのキー":
+                    NowDirector = director[12];
+                    eventFlags[12] = true;
+                    break;
+                case "bikeBox":
+                    //敵が追いかけるイベントでないことにする
+                    EventRun.instance.RunEventOff();
+                    NowDirector =  director[13];
+                    eventFlags[13] = true;
+                    break;
                 default:
                     break;
             }
@@ -93,7 +107,11 @@ public class EventManagerS : MonoBehaviour
     public string EventName(string event_name){
         switch(event_name){
             case "車":
-                re_event_name = "車";
+                if(EventRun.instance.NowRunEvent() == true){
+                    re_event_name = "車に乗る";
+                }else{
+                    re_event_name = "車";
+                }
                 break;
             case "TransWall_tell":
                 if(TellGame.instance.TellEventG() == true){
@@ -101,6 +119,12 @@ public class EventManagerS : MonoBehaviour
                 }else{
                     re_event_name = "電話に出る";
                 }
+                break;
+            case "バイクのキー":
+                re_event_name = "？？？";
+                break;
+            case "bikeBox":
+                re_event_name = "やすしのバイク";
                 break;
             default:
                 re_event_name = "イベント名が登録されていません";
