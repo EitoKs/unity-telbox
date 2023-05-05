@@ -13,39 +13,53 @@ public class InventManager : MonoBehaviour
     //アイテム画面が開かれているかどうかの判定
     private bool invent_triger;
     //アイテム数を管理する変数
-    [SerializeField]
+    //[SerializeField]
     public int item_num;
     //入手アイテム名を管理する変数
     private string[] ItemName;
     //マウスホイールの値を入れる変数を宣言
     private float scroll;
     //現在何番目のアイテムを選択しているか管理する変数
-    [SerializeField]
+    //[SerializeField]
     public int select_num;
 
     //現在装備しているアイテム名を入れる変数
-    public static string equip_item;
+    // public static string equip_item;
+    public string equip_item;
     //現在装備しているアイテムが何番目のアイテムか管理する変数
-    public static int equip_num;
+    //public static int equip_num;
+    public int equip_num;
     //現在何かしら装備しているか判定する変数
-    public static bool equip_judge;
+    // public static bool equip_judge;
+    public bool equip_judge;
     //装備中のテキストを管理する変数
     [SerializeField]
-    public Text Equipment_name;
+    private Text Equipment_name;
+
+    //このスクリプトをインスタンス化しておいて他のスクリプトからも潜入できるようにする
+    public static InventManager instance;
 
     //はじめにアイテム入手情報を取得しておく
     void Start()
     {
+        //このスクリプトをインスタンス化する
+        if(instance == null)
+        {
+            instance = this;
+        }
         //インベントリ画面が開かれているかどうかを判定する
         invent_triger = InventScript.InventJudg();
         //現在手に入れたアイテムの数を取得
-        item_num = ItemManager.SendItemCount();
+        //item_num = ItemManager.SendItemCount();
+        item_num = ItemManager.instance.count;
         //アイテム名を格納した配列を取得
-        ItemName = ItemManager.SendItemData();
+        //ItemName = ItemManager.SendItemData();
+        ItemName = ItemManager.instance.GetItem;
 
 
         //現在何かしら装備しているか受け取る
-        equip_judge = EquipManager.EquipJudge();
+        // equip_judge = EquipManager.EquipJudge();
+        equip_judge = NewEquipManager.instance.EquipJudge;
         //アイテムを装備していたら「装備中」のテキストを表示にする
         if(equip_judge == false){
             Equipment_name.enabled = false;
@@ -54,7 +68,8 @@ public class InventManager : MonoBehaviour
         }else{
             Equipment_name.enabled = true;
             //基準を装備中のアイテムの場所にしておく
-            equip_num = EquipManager.EquipNum();
+            equip_num = NewEquipManager.instance.equipNum;
+            equip_item = NewEquipManager.instance.equipName;
         }
         //はじめに選択しているアイテムを装備状況から決める
         select_num = equip_num;
@@ -72,7 +87,6 @@ public class InventManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         //インベントリ画面が開かれていれば
@@ -173,17 +187,17 @@ public class InventManager : MonoBehaviour
     }
 
     //現在装備しているアイテム名を返す関数
-    public static string EquipItem(){
-        return equip_item;
-    }
+    // public static string EquipItem(){
+    //     return equip_item;
+    // }
 
     //現在、装備をしているかどうかを返す関数
-    public static bool Equip_Judge(){
-        return equip_judge;
-    }
+    // public static bool Equip_Judge(){
+    //     return equip_judge;
+    // }
 
     //現在、何番目のアイテムを装備しているか返す関数
-    public static int Equip_Num(){
-        return equip_num;
-    }
+    // public static int Equip_Num(){
+    //     return equip_num;
+    // }
 }
