@@ -19,7 +19,7 @@ public class PauseScript : MonoBehaviour
 	public static PauseScript Pause_instance;
 
 	void Update () {
-		if(NowEventScript.EventJudge() == false && InventScript.InventJudg() == false){
+		if(NowEventScript.EventJudge() == false && InventScript.InventJudg() == false && Continue.ContinueJudge() == false && SumahoScript.SumahoJudg() == false && NovelScript.NovelJudg() == false){
         	//”Q”キーを押すとポーズ画面を開く
 			if (Input.GetKeyDown ("q")) {
             	//プレハブがインスタンス化されてなければインスタンス化する
