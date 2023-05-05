@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Timeline;
+using UnityEngine.Playables;
+using TMPro; //TextMeshProを扱う際に必要
 //Startボタンを押した後に流れるロード画面についてのスクリプト
 public class TitleManager : MonoBehaviour
 {
@@ -15,29 +18,33 @@ public class TitleManager : MonoBehaviour
 	[SerializeField]
 	private Slider slider;
 	//ボタンを押したときに流れる音
+	//[SerializeField]
+	//private AudioSource buttonaudio;
+	//
 	[SerializeField]
-	private AudioSource buttonaudio;
+	private PlayableDirector TitleDirector;
+
+	[SerializeField]	//エンドの収集数を表示するテキスト
+	private TextMeshProUGUI endcount;
 
     void Start()
     {
-        
+		CursorScript.CursorFree();		//カーソルを動かせるようにする
+        endcount.text = "エンド数\n"+ EndManager.end_count + " / 2";
     }
 
     public void MoveGame1(){
-        //SceneManager.LoadScene("Game1");
-        //コルーチンを始める
-        StartCoroutine("ClickPerformance");
+		//buttonaudio.GetComponent<AudioSource>().PlayOneShot(buttonaudio.clip);
+		TitleDirector.Play();
     }
 
-	IEnumerator ClickPerformance(){
-		buttonaudio.GetComponent<AudioSource>().PlayOneShot(buttonaudio.clip);
-		//2秒待つ（ここでちょっとした演出を入れる）
-		yield return new WaitForSeconds(2);
+	public void LoadGameScene(){
 		//ロードUIを表示
 		loadUI.SetActive(true);
 		//コルーチンを始める
         StartCoroutine("LoadData");
 	}
+
 
     IEnumerator LoadData() {
 		// シーンの読み込みをする
