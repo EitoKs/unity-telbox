@@ -44,7 +44,6 @@ public class ItemPicker : MonoBehaviour
         GetItem_text.enabled = false;       //下に表示するテキストを非表示にしておく
     }
 
-    // Update is called once per frame
     void Update()
     {
         //もしイベント中だったら非表示にしておく
@@ -84,7 +83,8 @@ public class ItemPicker : MonoBehaviour
                         //ポインタの上と下に表示するテキスト文章をTagごとに変更し、表示
                         if(hit.collider.CompareTag("Item")){
                             //ポインタ上のTextに注目している名前を入れる
-                            Item_name_text.GetComponent<Text>().text = hit.collider.gameObject.name;
+                            //Item_name_text.GetComponent<Text>().text = hit.collider.gameObject.name;
+                            Item_name_text.GetComponent<Text>().text = hit.collider.GetComponent<ObjectText>().object_name;
                             GetItem_text.text = "[F]で入手";
                         }else if(hit.collider.CompareTag("Event")){
                             //ポインタ上のTextに注目している名前を入れる
@@ -93,6 +93,7 @@ public class ItemPicker : MonoBehaviour
                         }else if(hit.collider.CompareTag("Object")){
                             //オブジェクトの名前からオブジェクトの状態を受け取る
                             Item_name_text.GetComponent<Text>().text = ObjectManager.instance.ObjectStateName(hit.collider.gameObject.name);
+                            //Item_name_text.GetComponent<Text>().text = hit.collider.GetComponent<ObjectText>().object_name;
                             GetItem_text.text = "[F]でアクション";
                         }
 //-------------------------------------------------------------------------------
@@ -120,6 +121,7 @@ public class ItemPicker : MonoBehaviour
                                 //DestroyImmediate(hit.collider.gameObject);      //オブジェクトを削除してみる
                             }else if(hit.collider.CompareTag("Object")){
                                 ObjectManager.instance.ObjectEvent(Item_Name);
+                                hit.collider.GetComponent<ObjectText>().ShowTextString();
                             }
                             //当たっているオブジェクトを初期化する
                             HitObject = null;
