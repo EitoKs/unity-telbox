@@ -46,6 +46,9 @@ public class ObjectManager : MonoBehaviour
                     ReObjectName = "閉める";
                 }
                 break;
+            case "bikeBox":
+                ReObjectName = "バイク";
+                break;
             default:
                 ReObjectName = "登録されていません";
                 break;
