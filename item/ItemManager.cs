@@ -6,25 +6,18 @@ using UnityEngine.UI;
 //アイテムの入手状況を管理するスクリプト（空のオブジェクトにつけておく）
 public class ItemManager : MonoBehaviour
 {
-    //アイテム一覧
-    private enum Item {
-        Item1,
-        懐中電灯,
-        Item2
-    };
-    //アイテム取得判定の変数
-    private bool getItem;
+    //アイテム一覧（インスペクター画面からアイテム名を登録）
+    public string[] Item;
     //最大アイテム数
-    private int item_number = 2;
+    private int item_number = 3;
     //アイテム入手判定（デバッグ用）
-    [SerializeField]
-    public bool[] itemFlags = new bool[2];
-    //アイテム名格納用変数
-    private string item_name;
+    public bool[] itemFlags;
     //入手アイテム数カウント用変数
-    public static int count;
+    public int count;
     //入手アイテム名格納用
-    public static string[] GetItem = new string[2];
+    public string[] GetItem;
+    //アイテムを使ったかどうかを判定
+    public bool[] useFlags; 
 
 
     //このスクリプトをインスタンス化しておいて他のスクリプトからも潜入できるようにする
@@ -38,45 +31,54 @@ public class ItemManager : MonoBehaviour
         }
     }
     
-    // Start is called before the first frame update
     void Start()
     {
-        count = 0;
+        count = 0;      //始めは何も入手していないためアイテム数を０にしておく
     }
-
+    //アイテムを入手したときの処理
     public void ItemGetIn(string item_namei){
-            //switch文でアイテム名を判断
-            //インスペクターからどのアイテムを入手したかわかる（デバッグ用）
-            switch(item_namei){
-                case "Item1":
-                    itemFlags[(int)Item.Item1] = true;
-                    break;
-                case "Item2":
-                    itemFlags[(int)Item.Item2] = true;
-                    break;
-                // case "Item3":
-                //     itemFlags[(int)Item.Item3] = true;
-                //     break;
-                case "懐中電灯":
-                    itemFlags[(int)Item.懐中電灯] = true;
-                    break;
-                default:
-                    break;
+            //事前に登録しておいたアイテム名と入手したアイテム名を比較
+            //インスペクターからはitemFlagsでどのアイテムを入手したかわかる（デバッグ用）
+            for(int i=0; i<item_number; i++){
+                if(item_namei == Item[i]){
+                    itemFlags[i] = true;
+                }
             }
+    //-----------------------------------------------------------------
             //最大アイテムより小さかったら入手アイテムを配列に格納
             //アイテムは入手順に格納していく
             if(count < item_number){
-                GetItem[count] = item_namei;
-                count++;
+                GetItem[count] = item_namei;    //入手したアイテムの名前を格納
+                count++;        //カウントを1進める
             }
     }
+    //-----------------------------------------------------------------
+    //アイテムを使ったときの処理
+    public void ItemUse(string item_namei){
+        NewEquipManager.instance.EquipClose();
+        //手に入れたアイテム内で使うものと一致するものはあるか判定
+        for(int i=0; i<GetItem.Length; i++){
+            if(item_namei == GetItem[i]){
+                GetItem[i] = null;
+            }
+            //もし現在調べているアイテム欄が空なら
+            if(GetItem[i] == null && i<GetItem.Length-1){
+                GetItem[i] = GetItem[i+1];  //所持アイテム欄を詰める
+                GetItem[i+1] = null;    //詰めた分、空にしておく
+            }
+        }
+        //アイテムを使った判定にする
+        for(int j=0; j<Item.Length; j++){
+            if(item_namei == Item[j]){
+                useFlags[j] = true;
+            }
+        }
+        count--;    //所持アイテム数を減らす
+    }
 
-    //アイテムの入手情報を送る関数
-    public static string[] SendItemData(){
-        return GetItem;
-    }
-    //現在の入手アイテム数を返す関数
-    public static int SendItemCount(){
-        return count;
-    }
+    // void Update(){
+    //     if(Input.GetKeyDown ("k")){
+    //         ItemUse("Item1");
+    //     }
+    // }
 }
